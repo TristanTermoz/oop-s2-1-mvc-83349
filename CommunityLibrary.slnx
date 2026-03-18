@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="CommunityLibrary.Domain/CommunityLibrary.Domain.csproj" />
+  <Project Path="CommunityLibrary.Tests/CommunityLibrary.Tests.csproj" />
+  <Project Path="CommunityLibrary.Web/CommunityLibrary.Web.csproj" />
+</Solution>
