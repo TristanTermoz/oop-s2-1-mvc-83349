@@ -1,0 +1,23 @@
+﻿@model IEnumerable<CommunityLibrary.Web.Models.Member>
+
+<h2>Members</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model)
+        {
+            <tr>
+                <td>@member.FullName</td>
+                <td>@member.Email</td>
+                <td>@member.Phone</td>
+            </tr>
+        }
+    </tbody>
+</table>

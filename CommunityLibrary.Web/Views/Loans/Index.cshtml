@@ -1,0 +1,30 @@
+﻿@foreach (var loan in Model)
+{
+    <tr class="@(loan.IsOverdue ? "table-danger" : "")">
+        <td>@loan.Book.Title</td>
+        <td>@loan.Member.FullName</td>
+        <td>@loan.DueDate.ToShortDateString()</td>
+        <td>
+            @if (loan.IsOverdue)
+            {
+                <span class="badge bg-danger">Overdue</span>
+            }
+            @if (loan.ReturnedDate != null)
+            {
+                <span class="badge bg-success">Returned</span>
+            }
+            @if (!loan.IsOverdue && loan.ReturnedDate == null)
+            {
+                <span class="badge bg-primary">Active</span>
+            }
+        </td>
+        <td>
+            @if (loan.ReturnedDate == null)
+            {
+                <form method="post" asp-action="MarkReturned" asp-route-id="@loan.Id">
+                    <button type="submit" class="btn btn-sm btn-success">Mark Returned</button>
+                </form>
+            }
+        </td>
+    </tr>
+}

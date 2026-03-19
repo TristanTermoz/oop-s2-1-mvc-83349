@@ -1,6 +1,7 @@
 using CommunityLibrary.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using CommunityLibrary.Web.ViewModels;
 
 namespace CommunityLibrary.Web.Controllers
 {
