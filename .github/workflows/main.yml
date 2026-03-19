@@ -20,7 +20,7 @@ permissions:
 env:
   DOTNET_VERSION: "10.0.x"
   # Point this to your xUnit test project (csproj). Adjust as needed. Minor change
-  TEST_PROJECT: "Library.Tests/Library.Tests.csproj"
+  TEST_PROJECT: "CommunityLibrary.Tests/CommunityLibrary.Tests.csproj"
 
 jobs:
   build-and-test:
