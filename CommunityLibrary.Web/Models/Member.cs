@@ -7,6 +7,5 @@ public class Member
     public string Email { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
 
-    // Navigation property
     public ICollection<Loan> Loans { get; set; } = new List<Loan>();
 }

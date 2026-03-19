@@ -1,29 +1,54 @@
-@model CommunityLibrary.Web.ViewModels.BookSearchViewModel
+﻿@model CommunityLibrary.Web.ViewModels.BookSearchViewModel
+
+<h2>Books</h2>
 
 <form method="get" asp-action="Index" class="row g-2 mb-3">
-  <div class="col-md-4">
-    <input name="searchTerm" value="@Model.SearchTerm"
-           placeholder="Search title or author..."
-           class="form-control" />
-  </div>
-  <div class="col-md-3">
-    <select name="category" class="form-select">
-      <option value="">All Categories</option>
-      @foreach (var cat in Model.Categories)
-      {
-        <option value="@cat" @(Model.Category==cat ? "selected" : "")>@cat</option>
-      }
-    </select>
-  </div>
-  <div class="col-md-3">
-    <select name="availability" class="form-select">
-      <option value="">All</option>
-      <option value="Available" @(Model.Availability=="Available" ? "selected":"")>Available</option>
-      <option value="OnLoan"    @(Model.Availability=="OnLoan"    ? "selected":"")>On Loan</option>
-    </select>
-  </div>
-  <div class="col-md-2">
-    <button type="submit" class="btn btn-primary w-100">Search</button>
-  </div>
+    <div class="col-md-4">
+        <input name="searchTerm" value="@Model.SearchTerm"
+               placeholder="Search title or author..." class="form-control" />
+    </div>
+    <div class="col-md-3">
+        <select name="category" class="form-select">
+            <option value="">All Categories</option>
+            @foreach (var cat in Model.Categories)
+            {
+                <option value="@cat" selected="@(Model.Category == cat)">
+                    @cat
+                </option>
+            }
+        </select>
+    </div>
+    <div class="col-md-3">
+        <select name="availability" class="form-select">
+            <option value="">All</option>
+            <option value="Available" selected="@(Model.Availability == "Available")">Available</option>
+            <option value="OnLoan" selected="@(Model.Availability == "OnLoan")">On Loan</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
 </form>
 <a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">Clear filters</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Available</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var book in Model.Books)
+        {
+            <tr>
+                <td>@book.Title</td>
+                <td>@book.Author</td>
+                <td>@book.Category</td>
+                <td>@(book.IsAvailable ? "Yes" : "On Loan")</td>
+            </tr>
+        }
+    </tbody>
+</table>
