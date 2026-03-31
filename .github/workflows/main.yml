@@ -79,9 +79,8 @@ jobs:
           path: ./coveragereport
 
   deploy:
-    # Deploy automatically on push to main. The deploy step itself is gated by a repo secret
-    # so deployment only occurs when you explicitly enable it (set ENABLE_PAGES=true in repo secrets).
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Deploy only when manually triggered to avoid Pages 404 when Pages isn't enabled
+    if: github.event_name == 'workflow_dispatch'
     needs: build-and-test
     runs-on: ubuntu-latest
     environment:
@@ -90,5 +89,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        if: ${{ secrets.ENABLE_PAGES == 'true' }}
         uses: actions/deploy-pages@v4
