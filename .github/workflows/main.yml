@@ -79,9 +79,8 @@ jobs:
           path: ./coveragereport
 
   deploy:
-    # Only deploy on push to main and when Pages deployment is explicitly enabled
-    # Set repository secret ENABLE_PAGES=true to enable automatic GitHub Pages deployment.
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.ENABLE_PAGES == 'true'
+    # Only deploy on push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build-and-test
     runs-on: ubuntu-latest
     environment:
@@ -90,4 +89,5 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
+        if: secrets.ENABLE_PAGES == 'true'
         uses: actions/deploy-pages@v4
