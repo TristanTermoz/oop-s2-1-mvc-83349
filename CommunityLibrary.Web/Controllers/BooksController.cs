@@ -48,4 +48,47 @@ public class BooksController : Controller
         return View(vm);
     }
 
+    [HttpGet]
+    public IActionResult Create()
+        => View(new Book());
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Book model)
+    {
+        if (!ModelState.IsValid) return View(model);
+        _db.Books.Add(model);
+        await _db.SaveChangesAsync();
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var book = await _db.Books.FindAsync(id);
+        if (book == null) return NotFound();
+        return View(book);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(Book model)
+    {
+        if (!ModelState.IsValid) return View(model);
+        _db.Books.Update(model);
+        await _db.SaveChangesAsync();
+        return RedirectToAction("Index");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var book = await _db.Books.FindAsync(id);
+        if (book == null) return NotFound();
+        _db.Books.Remove(book);
+        await _db.SaveChangesAsync();
+        return RedirectToAction("Index");
+    }
+
 }

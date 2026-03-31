@@ -2,12 +2,18 @@
 
 <h2>Members</h2>
 
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-primary btn-sm">Create New Member</a>
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm ms-2">Refresh</a>
+</div>
+
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>Full Name</th>
             <th>Email</th>
             <th>Phone</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +23,13 @@
                 <td>@member.FullName</td>
                 <td>@member.Email</td>
                 <td>@member.Phone</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@member.Id" class="btn btn-sm btn-secondary me-1">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@member.Id" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete member?')">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>

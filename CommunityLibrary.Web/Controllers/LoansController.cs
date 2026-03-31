@@ -13,11 +13,36 @@ public class LoansController : Controller
         _db = db;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        var loans = await _db.Loans
+            .Include(l => l.Book)
+            .Include(l => l.Member)
+            .OrderByDescending(l => l.LoanDate)
+            .ToListAsync();
+
+        return View(loans);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        ViewBag.Books = await _db.Books.Where(b => b.IsAvailable)
+                              .Select(b => new SelectListItem(b.Title, b.Id.ToString()))
+                              .ToListAsync();
+        ViewBag.Members = await _db.Members
+                              .Select(m => new SelectListItem(m.FullName, m.Id.ToString()))
+                              .ToListAsync();
+        return View();
+    }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Loan model)
     {
-        // Business rule: block duplicate active loan
+        // Re-check business rule inside a transaction to reduce race conditions
+        using var tx = await _db.Database.BeginTransactionAsync();
         bool alreadyOnLoan = await _db.Loans.AnyAsync(
             l => l.BookId == model.BookId && l.ReturnedDate == null);
 
@@ -40,9 +65,11 @@ public class LoansController : Controller
 
         // Mark book unavailable
         var book = await _db.Books.FindAsync(model.BookId);
-        book!.IsAvailable = false;
+        if (book == null) return NotFound();
+        book.IsAvailable = false;
 
         await _db.SaveChangesAsync();
+        await tx.CommitAsync();
         return RedirectToAction("Index");
     }
 

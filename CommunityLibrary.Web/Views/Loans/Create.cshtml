@@ -1,0 +1,32 @@
+@model CommunityLibrary.Web.Models.Loan
+
+@{
+    ViewData["Title"] = "Create Loan";
+}
+
+<h2>Create Loan</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label class="form-label">Book</label>
+        <select name="BookId" class="form-select" required>
+            <option value="">Select book...</option>
+            @foreach (var b in ViewBag.Books as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)
+            {
+                <option value="@b.Value">@b.Text</option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Member</label>
+        <select name="MemberId" class="form-select" required>
+            <option value="">Select member...</option>
+            @foreach (var m in ViewBag.Members as List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>)
+            {
+                <option value="@m.Value">@m.Text</option>
+            }
+        </select>
+    </div>
+    <button class="btn btn-primary">Create Loan</button>
+</form>

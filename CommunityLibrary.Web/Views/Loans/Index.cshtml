@@ -1,30 +1,61 @@
-﻿@foreach (var loan in Model)
-{
-    <tr class="@(loan.IsOverdue ? "table-danger" : "")">
-        <td>@loan.Book.Title</td>
-        <td>@loan.Member.FullName</td>
-        <td>@loan.DueDate.ToShortDateString()</td>
-        <td>
-            @if (loan.IsOverdue)
-            {
-                <span class="badge bg-danger">Overdue</span>
-            }
-            @if (loan.ReturnedDate != null)
-            {
-                <span class="badge bg-success">Returned</span>
-            }
-            @if (!loan.IsOverdue && loan.ReturnedDate == null)
-            {
-                <span class="badge bg-primary">Active</span>
-            }
-        </td>
-        <td>
-            @if (loan.ReturnedDate == null)
-            {
-                <form method="post" asp-action="MarkReturned" asp-route-id="@loan.Id">
-                    <button type="submit" class="btn btn-sm btn-success">Mark Returned</button>
-                </form>
-            }
-        </td>
-    </tr>
-}
+﻿@model IEnumerable<CommunityLibrary.Web.Models.Loan>
+
+<h2>Loans</h2>
+
+<div class="mb-3 d-flex justify-content-between">
+    <div>
+        <a asp-action="Create" class="btn btn-primary">Create Loan</a>
+    </div>
+    <div>
+        <a asp-action="Index" class="btn btn-outline-secondary">Refresh</a>
+    </div>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>Member</th>
+            <th>Loan Date</th>
+            <th>Due Date</th>
+            <th>Returned</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var loan in Model)
+        {
+            <tr class="@(loan.IsOverdue ? "table-danger" : string.Empty)">
+                <td>@loan.Book?.Title</td>
+                <td>@loan.Member?.FullName</td>
+                <td>@loan.LoanDate.ToString("yyyy-MM-dd")</td>
+                <td>@loan.DueDate.ToString("yyyy-MM-dd")</td>
+                <td>@(loan.ReturnedDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                <td>
+                    @if (loan.ReturnedDate != null)
+                    {
+                        <span class="badge bg-success">Returned</span>
+                    }
+                    else if (loan.IsOverdue)
+                    {
+                        <span class="badge bg-danger">Overdue</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-primary">Active</span>
+                    }
+                </td>
+                <td>
+                    @if (loan.ReturnedDate == null)
+                    {
+                        <form method="post" asp-action="MarkReturned" asp-route-id="@loan.Id" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-sm btn-success">Mark Returned</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

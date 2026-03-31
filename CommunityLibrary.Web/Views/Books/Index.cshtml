@@ -29,7 +29,12 @@
         <button type="submit" class="btn btn-primary w-100">Search</button>
     </div>
 </form>
-<a asp-action="Index" class="btn btn-outline-secondary btn-sm mb-3">Clear filters</a>
+<div class="mb-3 d-flex justify-content-between">
+    <div>
+        <a asp-action="Create" class="btn btn-primary btn-sm">Create New Book</a>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm ms-2">Clear filters</a>
+    </div>
+</div>
 
 <table class="table table-bordered">
     <thead>
@@ -38,6 +43,7 @@
             <th>Author</th>
             <th>Category</th>
             <th>Available</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -48,6 +54,13 @@
                 <td>@book.Author</td>
                 <td>@book.Category</td>
                 <td>@(book.IsAvailable ? "Yes" : "On Loan")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-sm btn-secondary me-1">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@book.Id" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete book?')">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>

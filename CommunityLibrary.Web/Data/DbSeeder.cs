@@ -1,6 +1,7 @@
 ﻿using Bogus;
 using CommunityLibrary.Web.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 public static class DbSeeder
 {
@@ -12,7 +13,8 @@ public static class DbSeeder
         UserManager<IdentityUser> userManager,
         RoleManager<IdentityRole> roleManager)
     {
-        await db.Database.EnsureCreatedAsync();
+        // Apply any pending migrations on startup so the database schema is up-to-date
+        await db.Database.MigrateAsync();
 
         if (!await roleManager.RoleExistsAsync("Admin"))
             await roleManager.CreateAsync(new IdentityRole("Admin"));
